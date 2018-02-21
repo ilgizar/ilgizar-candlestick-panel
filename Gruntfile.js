@@ -26,6 +26,12 @@ module.exports = (grunt) => {
         src: ['img/*'],
         dest: 'dist/'
       },
+      partials_to_dist: {
+        cwd: 'src',
+        expand: true,
+        src: ['partials/*'],
+        dest: 'dist/'
+      },
     },
 
     watch: {

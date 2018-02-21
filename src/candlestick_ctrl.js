@@ -64,7 +64,7 @@ export class CandleStickCtrl extends MetricsPanelCtrl {
   }
 
   onInitEditMode() {
-    this.addEditorTab('Options', 'public/plugins/ilgizar-candlestick-panel/editor.html', 2);
+    this.addEditorTab('Options', 'public/plugins/ilgizar-candlestick-panel/partials/editor.html', 2);
     this.unitFormats = kbn.getUnitFormats();
   }
 
@@ -150,4 +150,4 @@ export class CandleStickCtrl extends MetricsPanelCtrl {
   }
 }
 
-CandleStickCtrl.templateUrl = 'module.html';
+CandleStickCtrl.templateUrl = 'partials/module.html';
