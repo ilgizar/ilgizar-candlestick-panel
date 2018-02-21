@@ -1,4 +1,4 @@
-# Candlestick Panel
+# Grafana Candlestick Panel
 
 ### Screenshots
 

@@ -1,11 +1,11 @@
 {
-  "name": "candlestick-panel",
+  "name": "ilgizar-candlestick-panel",
   "private": true,
   "version": "0.0.1",
-  "description": "",
+  "description": "Grafana candlestick panel",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ilgizar/candlestick-panel/candlestick-panel.git"
+    "url": "git+https://github.com/ilgizar/ilgizar-candlestick-panel.git"
   },
   "author": "Ilgizar",
   "license": "MIT",
