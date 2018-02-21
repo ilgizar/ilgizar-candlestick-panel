@@ -1,5 +1,11 @@
 # Grafana Candlestick Panel
 
+### Usage
+
+Four basic metrics should have aliases: *open*, *close*, *high*, *low*. The trade volume metric has alias *volume*. All other metrics are taken by indicators.
+
+Work tested on Influx data source.
+
 ### Screenshots
 
 Main view with plugin options:
