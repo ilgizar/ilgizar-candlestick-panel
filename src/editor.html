@@ -1,0 +1,64 @@
+<div class="editor-row">
+  <div class="section gf-form-group">
+    <h5 class="section-heading">Candlestick options</h5>
+    <div class="gf-form">
+      <label class="gf-form-label width-9">Draw mode</label>
+      <span class="max-width-10">
+        <select class="input-small gf-form-input" ng-model="ctrl.panel.mode" ng-options="t for t in ['color', 'solid', 'bar']" ng-change="ctrl.render()"></select>
+      </span>
+    </div>
+    <gf-form-switch class="gf-form" label="Show volume" label-class="width-9" checked="ctrl.panel.showVolume" on-change="ctrl.render()"></gf-form-switch>
+    <gf-form-switch class="gf-form" label="Fill volume" label-class="width-9" checked="ctrl.panel.fillVolume" on-change="ctrl.render()" ng-if="ctrl.panel.showVolume === true"></gf-form-switch>
+  </div>
+
+  <div class="section gf-form-group">
+    <h5 class="section-heading">Colors</h5>
+    <div class="gf-form" ng-if="ctrl.panel.mode === 'color'">
+      <label class="gf-form-label width-9">Bullish</label>
+      <span class="max-width-10">
+        <spectrum-picker class="gf-form-input" ng-model="ctrl.panel.bullColor" ng-change="ctrl.render()"></spectrum-picker>
+      </span>
+    </div>
+    <div class="gf-form" ng-if="ctrl.panel.mode === 'color'">
+      <label class="gf-form-label width-9">Doji</label>
+      <span class="max-width-10">
+        <spectrum-picker class="gf-form-input" ng-model="ctrl.panel.dojiColor" ng-change="ctrl.render()"></spectrum-picker>
+      </span>
+    </div>
+    <div class="gf-form" ng-if="ctrl.panel.mode === 'color'">
+      <label class="gf-form-label width-9">Bearish</label>
+      <span class="max-width-10">
+        <spectrum-picker class="gf-form-input" ng-model="ctrl.panel.bearColor" ng-change="ctrl.render()"></spectrum-picker>
+      </span>
+    </div>
+    <div class="gf-form" ng-if="ctrl.panel.mode === 'solid'">
+      <label class="gf-form-label width-9">Solid</label>
+      <span class="max-width-10">
+        <spectrum-picker class="gf-form-input" ng-model="ctrl.panel.solidColor" ng-change="ctrl.render()"></spectrum-picker>
+      </span>
+    </div>
+    <div class="gf-form" ng-if="ctrl.panel.mode === 'bar'">
+      <label class="gf-form-label width-9">Bar</label>
+      <span class="max-width-10">
+        <spectrum-picker class="gf-form-input" ng-model="ctrl.panel.barColor" ng-change="ctrl.render()"></spectrum-picker>
+      </span>
+    </div>
+    <div class="gf-form" ng-if="ctrl.panel.showVolume === true">
+      <label class="gf-form-label width-9">Volume</label>
+      <span class="max-width-10">
+        <spectrum-picker class="gf-form-input" ng-model="ctrl.panel.volumeColor" ng-change="ctrl.render()"></spectrum-picker>
+      </span>
+    </div>
+  </div>
+
+  <div class="section gf-form-group">
+    <h5 class="section-heading">Tooltip</h5>
+    <gf-form-switch class="gf-form" label="Colorize" label-class="width-9" checked="ctrl.panel.colorizeTooltip" on-change="ctrl.render()"></gf-form-switch>
+    <div class="gf-form">
+      <label class="gf-form-label width-9">Date/Time Format</label>
+      <span class="max-width-12">
+        <input type="text" class="input-medium gf-form-input max-width-12" ng-model="ctrl.panel.tooltipFormat" ng-change="ctrl.render()" ng-model-onblur>
+      </span>
+    </div>
+  </div>
+</div>

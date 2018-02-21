@@ -1,0 +1,31 @@
+{
+  "type": "panel",
+  "name": "Candlestick",
+  "id": "ilgizar-candlestick-panel",
+
+  "info": {
+    "description": "Candlestick Grafana panel",
+    "author": {
+      "name": "Ilgizar",
+      "url": "http://github.com/ilgizar"
+    },
+    "keywords": ["candlestick", "panel"],
+    "logos": {
+      "small": "img/icn-candlestick-panel.svg",
+      "large": "img/icn-candlestick-panel.svg"
+    },
+    "links": [
+      {"name": "Project site", "url": "https://github.com/ilgizar/candlestick-panel"},
+      {"name": "MIT License", "url": "https://github.com/ilgizar/candlestick-panel/LICENSE"}
+    ],
+    "screenshots": [
+      {"name": "Legend on the graph", "path": "src/img/piechart-legend-on-graph.png"}
+    ],
+    "version": "0.0.1",
+    "updated": "2018-01-24"
+  },
+  "dependencies": {
+    "grafanaVersion": "4.6",
+    "plugins": [ ]
+  }
+}
