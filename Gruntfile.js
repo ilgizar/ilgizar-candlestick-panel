@@ -53,7 +53,17 @@ module.exports = (grunt) => {
       },
     },
 
+    zip: {
+      'pack': {
+        cwd: '../',
+        src: [
+          'dist/*', 'dist/*/*', 'src/*', 'src/*/*',
+          'Gruntfile.js', 'LICENSE', 'package.json', 'README.md'
+        ],
+        dest: './pack/ilgizar-candlestick-panel.zip'
+      }
+    },
   });
 
-  grunt.registerTask('default', ['clean', 'copy:src_to_dist', 'copy:pluginDef', 'copy:img_to_dist', 'babel']);
+  grunt.registerTask('default', ['clean', 'copy:src_to_dist', 'copy:pluginDef', 'copy:img_to_dist', 'babel', 'zip']);
 };
