@@ -30,8 +30,39 @@ export default function link(scope, elem, attrs, ctrl) {
   });
 
   elem.mouseleave(function () {
-    $tooltip.detach();
+    if (plot) {
+      cleatTooltip();
+    }
+    appEvents.emit('graph-hover-clear');
   });
+
+  appEvents.on(
+    'graph-hover',
+    evt => {
+      // ignore other graph hover events if shared tooltip is disabled
+      if (!dashboard.sharedTooltipModeEnabled()) {
+        return;
+      }
+
+      // ignore if we are the emitter
+      if (!plot || evt.panel.id === panel.id || ctrl.otherPanelInFullscreenMode()) {
+        return;
+      }
+
+      showToolpit(evt.pos);
+    },
+    scope
+  );
+
+  appEvents.on(
+    'graph-hover-clear',
+    (event, info) => {
+      if (plot) {
+        cleatTooltip();
+      }
+    },
+    scope
+  );
 
   function setElementHeight() {
     try {
@@ -217,10 +248,37 @@ export default function link(scope, elem, attrs, ctrl) {
 
     plotCanvas.bind("plothover", function (event, pos, item) {
       showToolpit(pos);
+
+      // broadcast to other graph panels that we are hovering!
+      pos.panelRelY = (pos.pageY - elem.offset().top) / elem.height();
+      appEvents.emit('graph-hover', {pos: pos, panel: panel});
     });
   }
 
   function showToolpit(pos) {
+    // if panelRelY is defined another panel wants us to show a tooltip
+    // get pageX from position on x axis and pageY from relative position in original panel
+    if (pos.panelRelY) {
+      var pointOffset = plot.pointOffset({x: pos.x});
+      if (Number.isNaN(pointOffset.left) || pointOffset.left < 0 || pointOffset.left > elem.width()) {
+        cleatTooltip();
+        return;
+      }
+      pos.pageX = elem.offset().left + pointOffset.left;
+      pos.pageY = elem.offset().top + elem.height() * pos.panelRelY;
+      var isVisible = pos.pageY >= $(window).scrollTop() && pos.pageY <= $(window).innerHeight() + $(window).scrollTop();
+      if (!isVisible) {
+        cleatTooltip();
+        return;
+      }
+      plot.setCrosshair(pos);
+
+      if (dashboard.sharedCrosshairModeOnly()) {
+        // if only crosshair mode we are done
+        return;
+      }
+    }
+
     var seriesItem = function(label, value, color, line) {
       let seriesHtml = '<div class="graph-tooltip-list-item">';
       if (line) {
@@ -272,6 +330,12 @@ export default function link(scope, elem, attrs, ctrl) {
 
     $tooltip.html(body).place_tt(pos.pageX + 20, pos.pageY);
   }
+
+  function cleatTooltip() {
+    $tooltip.detach();
+    plot.clearCrosshair();
+    plot.unhighlight();
+  };
 
   function formatValue(value) {
     switch (true) {
