@@ -70,7 +70,7 @@
 
   <div class="section gf-form-group">
     <h5 class="section-heading">Tooltip</h5>
-    <gf-form-switch class="gf-form" label="Colorize" label-class="width-9" checked="ctrl.panel.colorizeTooltip" on-change="ctrl.render()"></gf-form-switch>
+    <gf-form-switch class="gf-form" label="Colorize" label-class="width-9" checked="ctrl.panel.colorizeTooltip" on-change="ctrl.render()" ng-if="ctrl.panel.mode === 'color'"></gf-form-switch>
     <div class="gf-form">
       <label class="gf-form-label width-9">Date/Time Format</label>
       <span class="max-width-12">
