@@ -20,6 +20,13 @@ export default function link(scope, elem, attrs, ctrl) {
     render(false);
   });
 
+  ctrl.events.on('panel-teardown', () => {
+    if (plot) {
+      plot.destroy();
+      plot = null;
+    }
+  });
+
   elem.bind('plotselected', function(event, ranges) {
     scope.$apply(function() {
       scope.ctrl.timeSrv.setTime({
@@ -101,6 +108,12 @@ export default function link(scope, elem, attrs, ctrl) {
   }
 
   function render_panel() {
+    data = ctrl.data;
+
+    if (data.length < 4) {
+      return;
+    }
+
     var panelWidth = elem.width();
     var panelHeight = elem.height();
 
@@ -129,7 +142,7 @@ export default function link(scope, elem, attrs, ctrl) {
       show: true,
       position: 'left',
     }];
-    if (panel.showVolume) {
+    if (panel.showVolume && (data.length > 4)) {
       yaxes.push({
         index: 2,
         logBase: 1,
@@ -194,21 +207,21 @@ export default function link(scope, elem, attrs, ctrl) {
       }
     };
 
-    data = ctrl.data;
-
     for (var i = 0; i < data.length; i++) {
       let series = data[i];
       series.data = series.getFlotPairs(series.nullPointMode || panel.nullPointMode);
     }
 
-    var candleData = [];
+    var candleData = [], high = [], low = [];
 
     for (i = 0; i < data[0].data.length; i++) {
       candleData.push([data[0].data[i][0], data[0].data[i][1], data[1].data[i][1], data[2].data[i][1], data[3].data[i][1]]);
+      low.push([data[0].data[i][0], data[2].data[i][1]]);
+      high.push([data[0].data[i][0], data[3].data[i][1]]);
     }
 
     var datas = [];
-    if (panel.showVolume) {
+    if (panel.showVolume && (data.length > 4)) {
       datas.push({
         lines: {
           show: true,
@@ -225,6 +238,30 @@ export default function link(scope, elem, attrs, ctrl) {
       },
       data: candleData,
       hoverable: true,
+    },{
+      label: "High",
+      data: high,
+      lines: {
+        show: false
+      },
+      candlestick: {
+        show: false
+      },
+      nearBy: {
+        findItem:null
+      }
+    },{
+      label: "Low",
+      data: low,
+      lines: {
+        show: false
+      },
+      candlestick: {
+        show: false
+      },
+      nearBy: {
+        findItem:null
+      }
     });
 
     if (data.length > 5) {
@@ -313,7 +350,7 @@ export default function link(scope, elem, attrs, ctrl) {
         panel.colorizeTooltip && panel.mode === 'color' ? panel.bearColor : grayColor, false) +
       seriesItem('Close', formatValue(data[1].datapoints[i][0]), grayColor, false);
 
-    if (panel.showVolume) {
+    if (panel.showVolume && data.length > 4) {
       body += seriesItem('Volume', formatValue(data[4].datapoints[i][0]),
         panel.colorizeTooltip && panel.mode === 'color' ? panel.volumeColor : grayColor, false);
     }
