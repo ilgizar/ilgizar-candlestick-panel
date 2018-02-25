@@ -52,6 +52,23 @@
   </div>
 
   <div class="section gf-form-group">
+    <h5 class="section-heading">Y-Axes</h5>
+    <gf-form-switch class="gf-form" label="Swap" label-class="width-9" checked="ctrl.panel.swapYaxes" on-change="ctrl.render()"></gf-form-switch>
+    <div class="gf-form">
+      <label class="gf-form-label width-9">Price label</label>
+      <span class="max-width-12">
+        <input type="text" class="input-medium gf-form-input max-width-12" ng-model="ctrl.panel.labelY1" placeholder="none" empty-to-null ng-change="ctrl.render()" ng-model-onblur>
+      </span>
+    </div>
+    <div class="gf-form">
+      <label class="gf-form-label width-9">Volume label</label>
+      <span class="max-width-12">
+        <input type="text" class="input-medium gf-form-input max-width-12" ng-model="ctrl.panel.labelY2" placeholder="none" empty-to-null ng-change="ctrl.render()" ng-model-onblur>
+      </span>
+    </div>
+  </div>
+
+  <div class="section gf-form-group">
     <h5 class="section-heading">Tooltip</h5>
     <gf-form-switch class="gf-form" label="Colorize" label-class="width-9" checked="ctrl.panel.colorizeTooltip" on-change="ctrl.render()"></gf-form-switch>
     <div class="gf-form">

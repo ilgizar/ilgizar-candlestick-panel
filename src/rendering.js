@@ -4,6 +4,7 @@ import moment from 'moment';
 import 'jquery.flot';
 import { appEvents } from 'app/core/core';
 import './jquery_flot_candlestick';
+import './jquery_flot_axislabels';
 
 export default function link(scope, elem, attrs, ctrl) {
   var data, panel, dashboard, plot;
@@ -140,14 +141,16 @@ export default function link(scope, elem, attrs, ctrl) {
       index: 1,
       logBase: 1,
       show: true,
-      position: 'left',
+      position: panel.swapYaxes ? 'right' : 'left',
+      axisLabel: panel.labelY1,
     }];
     if (panel.showVolume && (data.length > 4)) {
       yaxes.push({
         index: 2,
         logBase: 1,
         show: true,
-        position: 'right',
+        position: panel.swapYaxes ? 'left' : 'right',
+        axisLabel: panel.labelY2,
       });
     }
 

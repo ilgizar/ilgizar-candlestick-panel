@@ -25,14 +25,20 @@ export class CandleStickCtrl extends MetricsPanelCtrl {
       mode: 'color',
       showVolume: true,
       fillVolume: true,
-      colorizeTooltip: true,
-      tooltipFormat: 'YYYY-MM-DD HH:mm:ss',
+
       bullColor: '#26ff42',
       bearColor: '#ff4a3a',
       dojiColor: '#c8c9ca',
       solidColor: '#000000',
       barColor: '#000000',
       volumeColor: '#584477',
+
+      swapYaxes: true,
+      labelY1: null,
+      labelY2: null,
+
+      colorizeTooltip: true,
+      tooltipFormat: 'YYYY-MM-DD HH:mm:ss',
     };
 
     _.defaults(this.panel, panelDefaults);
