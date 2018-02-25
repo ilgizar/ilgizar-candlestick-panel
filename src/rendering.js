@@ -121,10 +121,10 @@ export default function link(scope, elem, attrs, ctrl) {
     var plotCanvas = $('<div></div>');
     var plotCss = {
       top: '10px',
-      left: '10px',
+      left: '0px',
       margin: 'auto',
       position: 'relative',
-      width: (panelWidth - 20) + 'px',
+      width: panelWidth + 'px',
       height: (panelHeight - 20) + 'px'
     };
 
