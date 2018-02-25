@@ -7,6 +7,24 @@
         <select class="input-small gf-form-input" ng-model="ctrl.panel.mode" ng-options="t for t in ['color', 'solid', 'bar']" ng-change="ctrl.render()"></select>
       </span>
     </div>
+    <div class="gf-form">
+      <label class="gf-form-label width-9">Max data points</label>
+      <span class="max-width-12">
+        <input type="text" class="input-medium gf-form-input max-width-5" ng-model="ctrl.panel.maxDataPoints" placeholder="auto" empty-to-null ng-change="ctrl.refresh()" ng-model-onblur>
+      </span>
+    </div>
+    <div class="gf-form">
+      <label class="gf-form-label width-9">Candlestick width</label>
+      <span class="max-width-12">
+        <select class="input-small gf-form-input" ng-model="ctrl.panel.widthMode" ng-options="t for t in ['auto', 'static']" ng-change="ctrl.render()"></select>
+      </span>
+    </div>
+    <div class="gf-form" ng-if="ctrl.panel.widthMode === 'static'">
+      <label class="gf-form-label width-8 offset-width-1">Static width</label>
+      <span class="max-width-12">
+        <select class="input-small gf-form-input" ng-model="ctrl.panel.candlestickWidth" ng-options="t for t in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50]" ng-change="ctrl.render()"></select>
+      </span>
+    </div>
     <gf-form-switch class="gf-form" label="Show volume" label-class="width-9" checked="ctrl.panel.showVolume" on-change="ctrl.render()"></gf-form-switch>
     <gf-form-switch class="gf-form" label="Fill volume" label-class="width-9" checked="ctrl.panel.fillVolume" on-change="ctrl.render()" ng-if="ctrl.panel.showVolume === true"></gf-form-switch>
   </div>
@@ -69,7 +87,7 @@
   </div>
 
   <div class="section gf-form-group">
-    <h5 class="section-heading">Tooltip</h5>
+    <h5 class="section-heading">Hover tooltip</h5>
     <gf-form-switch class="gf-form" label="Colorize" label-class="width-9" checked="ctrl.panel.colorizeTooltip" on-change="ctrl.render()" ng-if="ctrl.panel.mode === 'color'"></gf-form-switch>
     <div class="gf-form">
       <label class="gf-form-label width-9">Date/Time Format</label>

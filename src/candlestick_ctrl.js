@@ -23,6 +23,9 @@ export class CandleStickCtrl extends MetricsPanelCtrl {
     var panelDefaults = {
       datasource: null,
       mode: 'color',
+      widthMode: 'auto',
+      maxDataPoints: 80,
+      candlestickWidth: 9,
       showVolume: true,
       fillVolume: true,
 
@@ -42,7 +45,6 @@ export class CandleStickCtrl extends MetricsPanelCtrl {
     };
 
     _.defaults(this.panel, panelDefaults);
-    this.panel.maxDataPoints = 80;
 
     this.events.on('render', this.onRender.bind(this));
     this.events.on('data-received', this.onDataReceived.bind(this));

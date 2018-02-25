@@ -131,7 +131,10 @@ export default function link(scope, elem, attrs, ctrl) {
     plotCanvas.css(plotCss);
 
     var gridColor = '#c8c8c8';
-    var lineWidth = _.floor(panelWidth / (1.5 * panel.maxDataPoints));
+    var lineWidth = panel.widthMode === 'auto' ? _.floor(panelWidth / (1.5 * panel.maxDataPoints)) : panel.candlestickWidth;
+    if (!lineWidth) {
+      lineWidth = 9;
+    }
 
     var ticks = panelWidth / 100;
     var min = _.isUndefined(ctrl.range.from) ? null : ctrl.range.from.valueOf();
