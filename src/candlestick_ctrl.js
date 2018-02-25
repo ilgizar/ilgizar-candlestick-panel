@@ -27,7 +27,8 @@ export class CandleStickCtrl extends MetricsPanelCtrl {
       maxDataPoints: 80,
       candlestickWidth: 9,
       showVolume: true,
-      fillVolume: true,
+      volumeWidth: 1,
+      volumeFill: 1,
 
       bullColor: '#26ff42',
       bearColor: '#ff4a3a',

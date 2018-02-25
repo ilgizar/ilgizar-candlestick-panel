@@ -26,7 +26,18 @@
       </span>
     </div>
     <gf-form-switch class="gf-form" label="Show volume" label-class="width-9" checked="ctrl.panel.showVolume" on-change="ctrl.render()"></gf-form-switch>
-    <gf-form-switch class="gf-form" label="Fill volume" label-class="width-9" checked="ctrl.panel.fillVolume" on-change="ctrl.render()" ng-if="ctrl.panel.showVolume === true"></gf-form-switch>
+    <div class="gf-form" ng-if="ctrl.panel.showVolume === true">
+      <label class="gf-form-label width-8 offset-width-1">Line width</label>
+      <span class="max-width-12">
+        <select class="input-small gf-form-input" ng-model="ctrl.panel.volumeWidth" ng-options="t for t in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" ng-change="ctrl.render()"></select>
+      </span>
+    </div>
+    <div class="gf-form" ng-if="ctrl.panel.showVolume === true">
+      <label class="gf-form-label width-8 offset-width-1">Line fill</label>
+      <span class="max-width-12">
+        <select class="input-small gf-form-input" ng-model="ctrl.panel.volumeFill" ng-options="t for t in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" ng-change="ctrl.render()"></select>
+      </span>
+    </div>
   </div>
 
   <div class="section gf-form-group">

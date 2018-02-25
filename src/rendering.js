@@ -165,8 +165,8 @@ export default function link(scope, elem, attrs, ctrl) {
         lines: {
           show: false,
           zero: false,
-          lineWidth: 1,
-          fill: panel.fillVolume ? 0.1 : 0,
+          lineWidth: panel.volumeWidth ? panel.volumeWidth : 0,
+          fill: panel.volumeFill ? (0.1 * panel.volumeFill) : 0,
         },
         candlestick: {
           active: true,
