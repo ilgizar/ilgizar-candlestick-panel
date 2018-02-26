@@ -131,7 +131,7 @@ export default function link(scope, elem, attrs, ctrl) {
     plotCanvas.css(plotCss);
 
     var gridColor = '#c8c8c8';
-    var lineWidth = panel.widthMode === 'auto' ? _.floor(panelWidth / (1.5 * panel.maxDataPoints)) : panel.candlestickWidth;
+    var lineWidth = panel.widthMode === 'auto' ? _.floor(panelWidth / (1.5 * data[0].stats.count)) : panel.candlestickWidth;
     if (!lineWidth) {
       lineWidth = 9;
     }
