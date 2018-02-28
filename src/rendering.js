@@ -276,10 +276,11 @@ export default function link(scope, elem, attrs, ctrl) {
           lines: {
             show: true,
             zero: false,
-            lineWidth: 1,
-            fill: 0,
+            lineWidth: data[i].lines.lineWidth !== undefined ? data[i].lines.lineWidth : 1,
+            fill: data[i].lines.fill !== undefined ? data[i].lines.fill : 0,
           },
           data: data[i].flotpairs,
+          color: data[i].color,
           hoverable: false,
         });
       }
@@ -364,7 +365,7 @@ export default function link(scope, elem, attrs, ctrl) {
     if (data.length > 5) {
       body += '<div style="height: 2px; margin-top: 2px; border-top: solid 1px ' + grayColor + ';"></div>';
       var plotData = plot.getData();
-      var index = 1 + (panel.showVolume ? 1 : 0);
+      var index = 3 + (panel.showVolume ? 1 : 0);
       for (var j = 5; j < data.length; j++) {
         body += seriesItem(data[j].alias, formatValue(data[j].datapoints[i][0]),
           plotData[index++].color, true);

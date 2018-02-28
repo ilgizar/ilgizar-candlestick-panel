@@ -1,0 +1,21 @@
+<div class="editor-row">
+  <div class="section gf-form-group">
+    <div class="gf-form-inline" ng-repeat="indicator in ctrl.getIndicators()" ng-controller="IndicatorsCtrl">
+      <div class="gf-form">
+        <label class="gf-form-label width-9">{{ indicator.alias }}</label>&nbsp;
+      </div>
+      <div class="gf-form">
+        <label class="gf-form-label">Color</label>
+        <span class="max-width-10">
+          <spectrum-picker class="gf-form-input" ng-model="ctrl.panel.aliasColors[indicator.alias]" ng-change="ctrl.changeColor()"></spectrum-picker>
+        </span>
+      </div>
+      <div class="gf-form" ng-repeat="option in currentOverrides">
+        <label class="gf-form-label">{{option.name}}</label>
+        <span class="max-width-10">
+          <select class="input-small gf-form-input" ng-model="option.value" ng-options="t for t in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" ng-change="updateOverride()"></select>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -3,6 +3,7 @@ import _ from 'lodash';
 import kbn from 'app/core/utils/kbn';
 import TimeSeries from 'app/core/time_series';
 import rendering from './rendering';
+import colors from './colors';
 import appEvents from 'app/core/app_events';
 
 export class CandleStickCtrl extends MetricsPanelCtrl {
@@ -43,6 +44,8 @@ export class CandleStickCtrl extends MetricsPanelCtrl {
 
       colorizeTooltip: true,
       tooltipFormat: 'YYYY-MM-DD HH:mm:ss',
+
+      indicators: [],
     };
 
     _.defaults(this.panel, panelDefaults);
@@ -74,7 +77,7 @@ export class CandleStickCtrl extends MetricsPanelCtrl {
 
   onInitEditMode() {
     this.addEditorTab('Options', 'public/plugins/ilgizar-candlestick-panel/partials/editor.html', 2);
-    this.unitFormats = kbn.getUnitFormats();
+    this.addEditorTab('Indicators', 'public/plugins/ilgizar-candlestick-panel/partials/indicators.html', 3);
   }
 
   setUnitFormat(subItem) {
@@ -94,7 +97,17 @@ export class CandleStickCtrl extends MetricsPanelCtrl {
   }
 
   onRender() {
+    if (!this.series) {
+      return;
+    }
+
     this.data = this.parseSeries(this.series);
+
+    if (this.panel.seriesOverrides) {
+      for (let series of this.series) {
+        series.applySeriesOverrides(this.panel.seriesOverrides);
+      }
+    }
   }
 
   parseSeries(series) {
@@ -104,45 +117,64 @@ export class CandleStickCtrl extends MetricsPanelCtrl {
     var result = new Array(4);
     var index = 5;
     for (var i = 0; i < series.length; i++) {
+      if (series[i] !== undefined) {
         switch (series[i].alias) {
-            case 'open':
-                result[0] = series[i];
-                break;
-            case 'close':
-                result[1] = series[i];
-                break;
-            case 'low':
-                result[2] = series[i];
-                break;
-            case 'high':
-                result[3] = series[i];
-                break;
-            case 'volume':
-                result[4] = series[i];
-                break;
-            default:
-                result[index++] = series[i];
-                break;
+          case 'open':
+            result[0] = series[i];
+            break;
+          case 'close':
+            result[1] = series[i];
+            break;
+          case 'low':
+            result[2] = series[i];
+            break;
+          case 'high':
+            result[3] = series[i];
+            break;
+          case 'volume':
+            result[4] = series[i];
+            break;
+          default:
+            result[index++] = series[i];
+            break;
         }
+      }
     }
 
     return result;
   }
 
   onDataReceived(dataList) {
-    this.series = dataList.map(this.seriesHandler.bind(this));
+    this.series = dataList.map((item, index) => {
+      return this.seriesHandler(item, index)
+    });
+    this.refreshColors();
     this.data = this.parseSeries(this.series);
     this.render(this.data);
   }
 
-  seriesHandler(seriesData) {
+  seriesHandler(seriesData, index) {
     var series = new TimeSeries({
       datapoints: seriesData.datapoints,
-      alias: seriesData.target
+      alias: seriesData.target,
     });
 
     series.flotpairs = series.getFlotPairs(this.panel.nullPointMode);
     return series;
+  }
+
+  refreshColors() {
+    for (var i = 5; i < this.series.length; i++) {
+      if (this.series[i] !== undefined) {
+        this.panel.aliasColors[this.series[i].alias] = this.panel.aliasColors[this.series[i].alias] || colors[(i - 5) % colors.length];
+        this.series[i].color = this.panel.aliasColors[this.series[i].alias];
+      }
+    }
+  }
+
+  changeColor() {
+    this.refreshColors();
+    this.render();
   }
 
   link(scope, elem, attrs, ctrl) {
@@ -156,6 +188,10 @@ export class CandleStickCtrl extends MetricsPanelCtrl {
       this.hiddenSeries[serie.label] = true;
     }
     this.render();
+  }
+
+  getIndicators() {
+    return this.series ? _.takeRight(this.series, this.series.length - 5) : [];
   }
 }
 
