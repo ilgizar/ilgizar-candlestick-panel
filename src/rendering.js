@@ -109,6 +109,8 @@ export default function link(scope, elem, attrs, ctrl) {
   }
 
   function render_panel() {
+    refreshTooltip();
+
     data = ctrl.data;
 
     if (data.length < 4) {
@@ -376,6 +378,10 @@ export default function link(scope, elem, attrs, ctrl) {
     }
 
     $tooltip.html(body).place_tt(pos.pageX + 20, pos.pageY);
+  }
+
+  function refreshTooltip() {
+    $($tooltip).css('opacity', panel.transparentTooltip ? 0.75 : 1);
   }
 
   function clearTooltip() {

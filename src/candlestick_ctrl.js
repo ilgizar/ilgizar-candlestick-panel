@@ -43,6 +43,7 @@ export class CandleStickCtrl extends MetricsPanelCtrl {
       labelY2: null,
 
       colorizeTooltip: true,
+      transparentTooltip: false,
       tooltipFormat: 'YYYY-MM-DD HH:mm:ss',
 
       indicators: [],
