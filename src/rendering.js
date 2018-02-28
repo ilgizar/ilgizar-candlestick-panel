@@ -39,7 +39,7 @@ export default function link(scope, elem, attrs, ctrl) {
 
   elem.mouseleave(function () {
     if (plot) {
-      cleatTooltip();
+      clearTooltip();
     }
     appEvents.emit('graph-hover-clear');
   });
@@ -66,7 +66,7 @@ export default function link(scope, elem, attrs, ctrl) {
     'graph-hover-clear',
     (event, info) => {
       if (plot) {
-        cleatTooltip();
+        clearTooltip();
       }
     },
     scope
@@ -215,7 +215,9 @@ export default function link(scope, elem, attrs, ctrl) {
 
     for (var i = 0; i < data.length; i++) {
       let series = data[i];
-      series.data = series.getFlotPairs(series.nullPointMode || panel.nullPointMode);
+      if (series != undefined) {
+        series.data = series.getFlotPairs(series.nullPointMode || panel.nullPointMode);
+      }
     }
 
     var candleData = [], high = [], low = [];
@@ -227,7 +229,7 @@ export default function link(scope, elem, attrs, ctrl) {
     }
 
     var datas = [];
-    if (panel.showVolume && (data.length > 4)) {
+    if (panel.showVolume && (data.length > 4) && (data[4] !== undefined)) {
       datas.push({
         lines: {
           show: true,
@@ -305,14 +307,14 @@ export default function link(scope, elem, attrs, ctrl) {
     if (pos.panelRelY) {
       var pointOffset = plot.pointOffset({x: pos.x});
       if (Number.isNaN(pointOffset.left) || pointOffset.left < 0 || pointOffset.left > elem.width()) {
-        cleatTooltip();
+        clearTooltip();
         return;
       }
       pos.pageX = elem.offset().left + pointOffset.left;
       pos.pageY = elem.offset().top + elem.height() * pos.panelRelY;
       var isVisible = pos.pageY >= $(window).scrollTop() && pos.pageY <= $(window).innerHeight() + $(window).scrollTop();
       if (!isVisible) {
-        cleatTooltip();
+        clearTooltip();
         return;
       }
       plot.setCrosshair(pos);
@@ -357,15 +359,16 @@ export default function link(scope, elem, attrs, ctrl) {
         panel.colorizeTooltip && panel.mode === 'color' ? panel.bearColor : grayColor, false) +
       seriesItem('Close', formatValue(data[1].datapoints[i][0]), grayColor, false);
 
-    if (panel.showVolume && data.length > 4) {
+    var index = 3;
+    if (panel.showVolume && (data.length > 4) && (data[4] !== undefined)) {
       body += seriesItem('Volume', formatValue(data[4].datapoints[i][0]),
         panel.colorizeTooltip && panel.mode === 'color' ? panel.volumeColor : grayColor, false);
+      index++;
     }
 
     if (data.length > 5) {
       body += '<div style="height: 2px; margin-top: 2px; border-top: solid 1px ' + grayColor + ';"></div>';
       var plotData = plot.getData();
-      var index = 3 + (panel.showVolume ? 1 : 0);
       for (var j = 5; j < data.length; j++) {
         body += seriesItem(data[j].alias, formatValue(data[j].datapoints[i][0]),
           plotData[index++].color, true);
@@ -375,7 +378,7 @@ export default function link(scope, elem, attrs, ctrl) {
     $tooltip.html(body).place_tt(pos.pageX + 20, pos.pageY);
   }
 
-  function cleatTooltip() {
+  function clearTooltip() {
     $tooltip.detach();
     plot.clearCrosshair();
     plot.unhighlight();
