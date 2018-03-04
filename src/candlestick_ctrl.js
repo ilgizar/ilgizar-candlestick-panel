@@ -112,8 +112,9 @@ export class CandleStickCtrl extends MetricsPanelCtrl {
   }
 
   parseSeries(series) {
-    if (series === undefined)
-        return series;
+    if (series === undefined) {
+      return series;
+    }
 
     let result = new Array(4);
     let index = 5;
@@ -147,7 +148,7 @@ export class CandleStickCtrl extends MetricsPanelCtrl {
 
   onDataReceived(dataList) {
     this.series = dataList.map((item, index) => {
-      return this.seriesHandler(item, index)
+      return this.seriesHandler(item, index);
     });
     this.refreshColors();
     this.data = this.parseSeries(this.series);
@@ -167,7 +168,8 @@ export class CandleStickCtrl extends MetricsPanelCtrl {
   refreshColors() {
     for (let i = 5; i < this.series.length; i++) {
       if (this.series[i] !== undefined) {
-        this.panel.aliasColors[this.series[i].alias] = this.panel.aliasColors[this.series[i].alias] || colors[(i - 5) % colors.length];
+        this.panel.aliasColors[this.series[i].alias] =
+          this.panel.aliasColors[this.series[i].alias] || colors[(i - 5) % colors.length];
         this.series[i].color = this.panel.aliasColors[this.series[i].alias];
       }
     }

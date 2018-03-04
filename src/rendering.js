@@ -3,8 +3,8 @@ import $ from 'jquery';
 import moment from 'moment';
 import 'jquery.flot';
 import { appEvents } from 'app/core/core';
-import './jquery_flot_candlestick';
-import './jquery_flot_axislabels';
+import './vendor/jquery_flot_candlestick';
+import './vendor/jquery_flot_axislabels';
 
 export default function link(scope, elem, attrs, ctrl) {
   var data, panel, dashboard, plot;
@@ -37,7 +37,7 @@ export default function link(scope, elem, attrs, ctrl) {
     });
   });
 
-  elem.mouseleave(function () {
+  elem.mouseleave(function() {
     if (plot) {
       clearTooltip();
     }
@@ -133,7 +133,10 @@ export default function link(scope, elem, attrs, ctrl) {
     plotCanvas.css(plotCss);
 
     const gridColor = '#c8c8c8';
-    let lineWidth = panel.widthMode === 'auto' ? _.floor(panelWidth / (1.5 * data[0].stats.count)) : panel.candlestickWidth;
+    let lineWidth =
+      panel.widthMode === 'auto' ?
+        _.floor(panelWidth / (1.5 * data[0].stats.count)) :
+        panel.candlestickWidth;
     if (!lineWidth) {
       lineWidth = 9;
     }
@@ -217,7 +220,7 @@ export default function link(scope, elem, attrs, ctrl) {
 
     for (var i = 0; i < data.length; i++) {
       let series = data[i];
-      if (series != undefined) {
+      if (series !== undefined) {
         series.data = series.getFlotPairs(series.nullPointMode || panel.nullPointMode);
       }
     }
@@ -225,7 +228,13 @@ export default function link(scope, elem, attrs, ctrl) {
     let candleData = [], high = [], low = [];
 
     for (i = 0; i < data[0].data.length; i++) {
-      candleData.push([data[0].data[i][0], data[0].data[i][1], data[1].data[i][1], data[2].data[i][1], data[3].data[i][1]]);
+      candleData.push([
+        data[0].data[i][0],
+        data[0].data[i][1],
+        data[1].data[i][1],
+        data[2].data[i][1],
+        data[3].data[i][1]
+      ]);
       low.push([data[0].data[i][0], data[2].data[i][1]]);
       high.push([data[0].data[i][0], data[3].data[i][1]]);
     }
@@ -248,8 +257,8 @@ export default function link(scope, elem, attrs, ctrl) {
       },
       data: candleData,
       hoverable: true,
-    },{
-      label: "High",
+    }, {
+      label: 'High',
       data: high,
       lines: {
         show: false
@@ -258,10 +267,10 @@ export default function link(scope, elem, attrs, ctrl) {
         show: false
       },
       nearBy: {
-        findItem:null
+        findItem: null
       }
-    },{
-      label: "Low",
+    }, {
+      label: 'Low',
       data: low,
       lines: {
         show: false
@@ -270,7 +279,7 @@ export default function link(scope, elem, attrs, ctrl) {
         show: false
       },
       nearBy: {
-        findItem:null
+        findItem: null
       }
     });
 
@@ -294,7 +303,7 @@ export default function link(scope, elem, attrs, ctrl) {
 
     plot = $.plot(plotCanvas, datas, options);
 
-    plotCanvas.bind("plothover", function (event, pos, item) {
+    plotCanvas.bind('plothover', function(event, pos, item) {
       showToolpit(pos);
 
       // broadcast to other graph panels that we are hovering!
@@ -314,7 +323,9 @@ export default function link(scope, elem, attrs, ctrl) {
       }
       pos.pageX = elem.offset().left + pointOffset.left;
       pos.pageY = elem.offset().top + elem.height() * pos.panelRelY;
-      let isVisible = pos.pageY >= $(window).scrollTop() && pos.pageY <= $(window).innerHeight() + $(window).scrollTop();
+      let isVisible =
+        pos.pageY >= $(window).scrollTop() &&
+        pos.pageY <= $(window).innerHeight() + $(window).scrollTop();
       if (!isVisible) {
         clearTooltip();
         return;
@@ -330,14 +341,14 @@ export default function link(scope, elem, attrs, ctrl) {
     let seriesItem = function(label, value, color, line) {
       let seriesHtml = '<div class="graph-tooltip-list-item">';
       if (line) {
-        seriesHtml += '<div class="graph-tooltip-series-name">' + 
-          '<i class="fa fa-minus" style="color:' + color +';"></i> ' + label + ':</div>';
+        seriesHtml += '<div class="graph-tooltip-series-name">' +
+          '<i class="fa fa-minus" style="color:' + color + ';"></i> ' + label + ':</div>';
       } else {
-        seriesHtml += '<div class="graph-tooltip-series-name" style="color:' + color +';">' + label + ':</div>';
+        seriesHtml += '<div class="graph-tooltip-series-name" style="color:' + color + ';">' + label + ':</div>';
       }
       seriesHtml += '<div class="graph-tooltip-value">' + value + '</div></div>';
       return seriesHtml;
-    }
+    };
     const len = data[0].datapoints.length;
     let offset = 0;
     if (len > 0) {
@@ -353,7 +364,7 @@ export default function link(scope, elem, attrs, ctrl) {
 
     const absoluteTime = dashboard.formatDate(data[0].datapoints[i][1], panel.tooltipFormat);
 
-    let body = '<div class="graph-tooltip-time">'+ absoluteTime + '</div>' +
+    let body = '<div class="graph-tooltip-time">' + absoluteTime + '</div>' +
       seriesItem('Open', formatValue(data[0].datapoints[i][0]), grayColor, false) +
       seriesItem('High', formatValue(data[3].datapoints[i][0]),
         panel.colorizeTooltip && panel.mode === 'color' ? panel.bullColor : grayColor, false) +
@@ -388,7 +399,7 @@ export default function link(scope, elem, attrs, ctrl) {
     $tooltip.detach();
     plot.clearCrosshair();
     plot.unhighlight();
-  };
+  }
 
   function formatValue(value) {
     switch (true) {
@@ -413,19 +424,19 @@ export default function link(scope, elem, attrs, ctrl) {
     return value;
   }
 
-  function newDrawCandlestick(ctx,serie,data,hover) {
+  function newDrawCandlestick(ctx, serie, data, hover) {
     if (data.length < 5) {
       return;
     }
 
-    if(hover === true){
-      drawHover(ctx, serie, data, "rgba(255,255,255," + serie.candlestick.highlight.opacity + ")");
-    }else{
+    if (hover === true) {
+      drawHover(ctx, serie, data, 'rgba(255,255,255,' + serie.candlestick.highlight.opacity + ')');
+    } else {
       drawRange(ctx, serie, data);
       drawBody(ctx, serie, data);
     }
 
-    function getColor(ctx,serie,data){
+    function getColor(ctx, serie, data) {
       if (panel.mode === 'color') {
         if (data[1] === data[2]) {
           return serie.candlestick.neutralColor;
@@ -437,13 +448,13 @@ export default function link(scope, elem, attrs, ctrl) {
       return serie.candlestick.rangeColor;
     }
 
-    function drawRange(ctx,serie,data){
+    function drawRange(ctx, serie, data) {
       let x = serie.xaxis.p2c(data[0]);
       let y1 = serie.yaxis.p2c(data[3]);
       let y2 = serie.yaxis.p2c(data[4]);
       ctx.lineWidth = serie.candlestick.rangeWidth;
       ctx.beginPath();
-      ctx.strokeStyle = getColor(ctx,serie,data);
+      ctx.strokeStyle = getColor(ctx, serie, data);
       switch (panel.mode) {
         case 'color':
         case 'bar':
@@ -462,11 +473,11 @@ export default function link(scope, elem, attrs, ctrl) {
       ctx.stroke();
     }
 
-    function drawBody(ctx,serie,data){
+    function drawBody(ctx, serie, data) {
       let x = serie.xaxis.p2c(data[0]);
       let y1 = serie.yaxis.p2c(data[1]);
       let y2 = serie.yaxis.p2c(data[2]);
-      if(data[1] === data[2] && panel.mode !== 'bar'){
+      if (data[1] === data[2] && panel.mode !== 'bar') {
         y2 = y1 + 1;
       }
       ctx.beginPath();
@@ -503,7 +514,7 @@ export default function link(scope, elem, attrs, ctrl) {
       ctx.stroke();
     }
 
-    function drawHover(ctx,serie,data,c){
+    function drawHover(ctx, serie, data, c) {
       let x = serie.xaxis.p2c(data[0] - serie.candlestick.barWidth / 2);
       let y1 = serie.yaxis.p2c(data[3]);
       let y2 = serie.yaxis.p2c(data[4]);

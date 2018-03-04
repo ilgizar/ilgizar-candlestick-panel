@@ -1,0 +1,81 @@
+{
+  "allowJs": true,
+  "jsRules": {
+    "align": [
+      true,
+      "parameters",
+      "statements"
+    ],
+    "class-name": true,
+    "curly": true,
+    "eofline": true,
+    "forin": false,
+    "import-spacing": true,
+    "indent": [true, "spaces", 2],
+    "jsdoc-format": true,
+    "label-position": true,
+    "max-line-length": [true, 120],
+    "new-parens": true,
+    "no-arg": true,
+    "no-bitwise": false,
+    "no-conditional-assignment": true,
+    "no-consecutive-blank-lines": true,
+    "no-console": [
+      true,
+      "debug",
+      "info",
+      "time",
+      "timeEnd",
+      "trace"
+    ],
+    "no-construct": true,
+    "no-debugger": true,
+    "no-duplicate-super": true,
+    "no-duplicate-variable": true,
+    "no-empty": false,
+    "no-eval": true,
+    "no-reference": true,
+    "no-shadowed-variable": false,
+    "no-string-literal": true,
+    "no-string-throw": true,
+    "no-switch-case-fall-through": false,
+    "no-trailing-whitespace": true,
+    "no-unused-expression": true,
+    "no-use-before-declare": false,
+    "object-literal-sort-keys": false,
+    "one-line": [
+      true,
+      "check-open-brace",
+      "check-catch",
+      "check-else"
+    ],
+    "one-variable-per-declaration": false,
+    "quotemark": [
+      true,
+      "single",
+      "avoid-escape"
+    ],
+    "radix": false,
+    "semicolon": [true, "always", "ignore-bound-class-methods"],
+    "space-before-function-paren": [true, "never"],
+    "trailing-comma": {
+      "multiline": "always",
+      "singleline": "never"
+    },
+    "triple-equals": [true, "allow-null-check"],
+    "use-isnan": true,
+    "variable-name": [
+      true,
+      "ban-keywords"
+    ],
+    "whitespace": [
+      true,
+      "check-branch",
+      "check-decl",
+      "check-operator",
+      "check-separator",
+      "check-type",
+      "check-typecast"
+    ]
+  }
+}
