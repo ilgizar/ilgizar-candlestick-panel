@@ -21,7 +21,7 @@ export class CandleStickCtrl extends MetricsPanelCtrl {
       'log (base 1024)': 1024,
     };
 
-    var panelDefaults = {
+    let panelDefaults = {
       datasource: null,
       mode: 'color',
       widthMode: 'auto',
@@ -115,9 +115,9 @@ export class CandleStickCtrl extends MetricsPanelCtrl {
     if (series === undefined)
         return series;
 
-    var result = new Array(4);
-    var index = 5;
-    for (var i = 0; i < series.length; i++) {
+    let result = new Array(4);
+    let index = 5;
+    for (let i = 0; i < series.length; i++) {
       if (series[i] !== undefined) {
         switch (series[i].alias) {
           case 'open':
@@ -155,7 +155,7 @@ export class CandleStickCtrl extends MetricsPanelCtrl {
   }
 
   seriesHandler(seriesData, index) {
-    var series = new TimeSeries({
+    let series = new TimeSeries({
       datapoints: seriesData.datapoints,
       alias: seriesData.target,
     });
@@ -165,7 +165,7 @@ export class CandleStickCtrl extends MetricsPanelCtrl {
   }
 
   refreshColors() {
-    for (var i = 5; i < this.series.length; i++) {
+    for (let i = 5; i < this.series.length; i++) {
       if (this.series[i] !== undefined) {
         this.panel.aliasColors[this.series[i].alias] = this.panel.aliasColors[this.series[i].alias] || colors[(i - 5) % colors.length];
         this.series[i].color = this.panel.aliasColors[this.series[i].alias];
