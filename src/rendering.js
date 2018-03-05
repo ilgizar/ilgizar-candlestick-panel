@@ -115,7 +115,8 @@ export default function link(scope, elem, attrs, ctrl) {
 
     // return "no data points" when datapoints are not loaded.
     if (data.length < 4) {
-      $(`<div class="datapoints-warning flot-temp-elem">No data points</div>`).appendTo(elem);
+      $(elem).empty();
+      $('<div class="datapoints-warning flot-temp-elem">No data points</div>').appendTo(elem);
       return;
     }
 
@@ -315,6 +316,10 @@ export default function link(scope, elem, attrs, ctrl) {
   }
 
   function showToolpit(pos) {
+    if (data.length < 4) {
+      return;
+    }
+
     // if panelRelY is defined another panel wants us to show a tooltip
     // get pageX from position on x axis and pageY from relative position in original panel
     if (pos.panelRelY) {
