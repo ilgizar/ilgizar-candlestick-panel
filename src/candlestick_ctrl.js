@@ -91,12 +91,6 @@ export class CandleStickCtrl extends MetricsPanelCtrl {
     this.render();
   }
 
-  changeSeriesColor(series, color) {
-    series.color = color;
-    this.panel.aliasColors[series.alias] = series.color;
-    this.render();
-  }
-
   onRender() {
     if (!this.series) {
       return;
@@ -175,10 +169,23 @@ export class CandleStickCtrl extends MetricsPanelCtrl {
 
   refreshColors() {
     for (let i = 5; i < this.series.length; i++) {
+      var index = i - 5;
       if (this.series[i] !== undefined) {
-        this.panel.aliasColors[this.series[i].alias] =
-          this.panel.aliasColors[this.series[i].alias] || colors[(i - 5) % colors.length];
-        this.series[i].color = this.panel.aliasColors[this.series[i].alias];
+        if (
+          this.panel.seriesOverrides === undefined ||
+          this.panel.seriesOverrides.length <= index ||
+          this.panel.seriesOverrides[index] === undefined
+        ) {
+          this.panel.seriesOverrides[index] = {
+            alias: this.series[i].alias,
+            color: colors[index % colors.length],
+            linewidth: 1,
+            fill: 0
+          };
+        } else {
+          this.panel.seriesOverrides[index].alias = this.series[i].alias;
+        }
+        this.series[i].color = this.panel.seriesOverrides[index].color;
       }
     }
   }

@@ -15,7 +15,17 @@ export class IndicatorsCtrl {
 
     $scope.updateCurrentOverrides = function() {
       $scope.currentOverrides = [];
-      var value = $scope.override.linewidth;
+      var value = $scope.override.color;
+      if (_.isUndefined(value)) {
+        value = '#ffffff';
+      }
+      $scope.currentOverrides.push({
+        name: 'Color',
+        propertyName: 'color',
+        value: value,
+      });
+
+      value = $scope.override.linewidth;
       if (_.isUndefined(value)) {
         value = 1;
       }
@@ -37,8 +47,9 @@ export class IndicatorsCtrl {
     };
 
     $scope.updateOverride = function() {
-      $scope.override.linewidth = $scope.currentOverrides[0].value;
-      $scope.override.fill = $scope.currentOverrides[1].value;
+      $scope.override.color = $scope.currentOverrides[0].value;
+      $scope.override.linewidth = $scope.currentOverrides[1].value;
+      $scope.override.fill = $scope.currentOverrides[2].value;
       $scope.ctrl.render();
     };
 
@@ -47,6 +58,7 @@ export class IndicatorsCtrl {
     if (!$scope.override || $scope.override.length === 0) {
       var override = {
         'alias': $scope.indicator.alias,
+        'color': '#ffffff',
         'linewidth': 1,
         'fill': 0,
       };
