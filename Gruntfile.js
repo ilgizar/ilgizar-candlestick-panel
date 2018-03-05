@@ -5,6 +5,14 @@ module.exports = (grunt) => {
   grunt.loadNpmTasks('grunt-contrib-clean');
 
   grunt.initConfig({
+    tslint: {
+      options: {
+        configuration: "tslint.json",
+      },
+      files: {
+        src: [ "src/*.js" ]
+      },
+    },
 
     clean: ['dist'],
 
@@ -23,13 +31,19 @@ module.exports = (grunt) => {
       img_to_dist: {
         cwd: 'src',
         expand: true,
-        src: ['img/*'],
+        src: ['img/*.svg'],
         dest: 'dist/'
       },
       partials_to_dist: {
         cwd: 'src',
         expand: true,
-        src: ['partials/*'],
+        src: ['partials/*.html'],
+        dest: 'dist/'
+      },
+      vendor_to_dist: {
+        cwd: 'src',
+        expand: true,
+        src: ['vendor/*.js'],
         dest: 'dist/'
       },
     },
@@ -71,5 +85,8 @@ module.exports = (grunt) => {
     },
   });
 
-  grunt.registerTask('default', ['clean', 'copy:src_to_dist', 'copy:pluginDef', 'copy:img_to_dist', 'babel', 'zip']);
+  grunt.registerTask('default', [
+    'tslint', 'clean', 'copy:src_to_dist', 'copy:pluginDef', 'copy:img_to_dist',
+    'copy:vendor_to_dist', 'babel', 'zip'
+  ]);
 };

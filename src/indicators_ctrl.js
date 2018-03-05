@@ -15,7 +15,7 @@ export class IndicatorsCtrl {
 
     $scope.updateCurrentOverrides = function() {
       $scope.currentOverrides = [];
-      var value = $scope.override['linewidth'];
+      var value = $scope.override.linewidth;
       if (_.isUndefined(value)) {
         value = 1;
       }
@@ -25,7 +25,7 @@ export class IndicatorsCtrl {
         value: value,
       });
 
-      value = $scope.override['fill'];
+      value = $scope.override.fill;
       if (_.isUndefined(value)) {
         value = 0;
       }
@@ -37,14 +37,14 @@ export class IndicatorsCtrl {
     };
 
     $scope.updateOverride = function() {
-      $scope.override['linewidth'] = $scope.currentOverrides[0].value;
-      $scope.override['fill'] = $scope.currentOverrides[1].value;
+      $scope.override.linewidth = $scope.currentOverrides[0].value;
+      $scope.override.fill = $scope.currentOverrides[1].value;
       $scope.ctrl.render();
     };
 
     $scope.currentOverrides = [];
     $scope.override = $scope.getOverride();
-    if (!$scope.override || $scope.override.length == 0) {
+    if (!$scope.override || $scope.override.length === 0) {
       var override = {
         'alias': $scope.indicator.alias,
         'linewidth': 1,
