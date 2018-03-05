@@ -112,8 +112,16 @@ export class CandleStickCtrl extends MetricsPanelCtrl {
   }
 
   parseSeries(series) {
+
     if (series === undefined) {
-      return series;
+          return series;
+    }
+    // series must contain aliased datapoints
+    // open, high, low, and close, otherwise
+    // do not parse any further.
+    const keys = ['open', 'high', 'low', 'close'];
+    if (series.filter(dp => (keys.indexOf(dp.alias) > -1)).length < 4) {
+        return series;
     }
 
     let result = new Array(4);

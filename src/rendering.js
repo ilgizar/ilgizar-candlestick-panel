@@ -113,7 +113,9 @@ export default function link(scope, elem, attrs, ctrl) {
 
     data = ctrl.data;
 
+    // return "no data points" when datapoints are not loaded.
     if (data.length < 4) {
+      $(`<div class="datapoints-warning flot-temp-elem">No data points</div>`).appendTo(elem);
       return;
     }
 
