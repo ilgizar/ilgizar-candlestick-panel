@@ -176,6 +176,9 @@ export class CandleStickCtrl extends MetricsPanelCtrl {
           this.panel.seriesOverrides.length <= index ||
           this.panel.seriesOverrides[index] === undefined
         ) {
+          if (this.panel.seriesOverrides === undefined) {
+            this.panel.seriesOverrides = [];
+          }
           this.panel.seriesOverrides[index] = {
             alias: this.series[i].alias,
             color: colors[index % colors.length],
