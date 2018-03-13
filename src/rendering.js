@@ -359,7 +359,7 @@ export default function link(scope, elem, attrs, ctrl) {
     const len = data[0].datapoints.length;
     let offset = 0;
     if (len > 0) {
-      offset = (data[0].datapoints[1][1] - data[0].datapoints[0][1]) / 2;
+      offset = data[0].datapoints[1][1] - data[0].datapoints[0][1];
     }
     const posX = pos.x - offset;
     for (var i = 0; i < len; i++) {
@@ -436,12 +436,8 @@ export default function link(scope, elem, attrs, ctrl) {
       return;
     }
 
-    if (hover === true) {
-      drawHover(ctx, serie, data, 'rgba(255,255,255,' + serie.candlestick.highlight.opacity + ')');
-    } else {
-      drawRange(ctx, serie, data);
-      drawBody(ctx, serie, data);
-    }
+    drawRange(ctx, serie, data);
+    drawBody(ctx, serie, data);
 
     function getColor(ctx, serie, data) {
       if (panel.mode === 'color') {
@@ -456,7 +452,7 @@ export default function link(scope, elem, attrs, ctrl) {
     }
 
     function drawRange(ctx, serie, data) {
-      let x = serie.xaxis.p2c(data[0]);
+      let x = serie.xaxis.p2c(data[0]) + serie.candlestick.barWidth / 2;
       let y1 = serie.yaxis.p2c(data[3]);
       let y2 = serie.yaxis.p2c(data[4]);
       ctx.lineWidth = serie.candlestick.rangeWidth;
@@ -481,7 +477,8 @@ export default function link(scope, elem, attrs, ctrl) {
     }
 
     function drawBody(ctx, serie, data) {
-      let x = serie.xaxis.p2c(data[0]);
+      let half = serie.candlestick.barWidth / 2;
+      let x = serie.xaxis.p2c(data[0]) + half;
       let y1 = serie.yaxis.p2c(data[1]);
       let y2 = serie.yaxis.p2c(data[2]);
       if (data[1] === data[2] && panel.mode !== 'bar') {
@@ -489,7 +486,6 @@ export default function link(scope, elem, attrs, ctrl) {
       }
       ctx.beginPath();
       ctx.strokeStyle = getColor(ctx, serie, data);
-      let half = serie.candlestick.barWidth / 2;
       switch (panel.mode) {
         case 'color':
           ctx.lineWidth = serie.candlestick.barWidth;
@@ -518,18 +514,6 @@ export default function link(scope, elem, attrs, ctrl) {
           ctx.lineTo(x, y2);
           break;
       }
-      ctx.stroke();
-    }
-
-    function drawHover(ctx, serie, data, c) {
-      let x = serie.xaxis.p2c(data[0] - serie.candlestick.barWidth / 2);
-      let y1 = serie.yaxis.p2c(data[3]);
-      let y2 = serie.yaxis.p2c(data[4]);
-      ctx.beginPath();
-      ctx.strokeStyle = c;
-      ctx.lineWidth = serie.candlestick.barWidth;
-      ctx.moveTo(x, y1);
-      ctx.lineTo(x, y2);
       ctx.stroke();
     }
   }
