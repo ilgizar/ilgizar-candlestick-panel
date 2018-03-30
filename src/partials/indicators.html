@@ -9,8 +9,20 @@
         <span class="max-width-10" ng-if="option.propertyName === 'color'">
           <spectrum-picker class="gf-form-input" ng-model="option.value" ng-change="updateOverride()"></spectrum-picker>
         </span>
-        <span class="max-width-10" ng-if="option.propertyName === 'linewidth' || option.propertyName === 'fill'">
+        <span class="max-width-10" ng-if="option.propertyName === 'mode'">
+          <select class="input-small gf-form-input" ng-model="option.value" ng-options="t for t in ['lines', 'bars', 'points']" ng-change="updateOverride()"></select>
+        </span>
+        <span class="max-width-10" ng-if="option.propertyName === 'linewidth'">
           <select class="input-small gf-form-input" ng-model="option.value" ng-options="t for t in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" ng-change="updateOverride()"></select>
+        </span>
+        <span class="max-width-10" ng-if="option.propertyName === 'fill'">
+          <select class="input-small gf-form-input" ng-model="option.value" ng-options="t for t in [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]" ng-change="updateOverride()"></select>
+        </span>
+        <span class="max-width-10" ng-if="option.propertyName === 'pointradius'">
+          <select class="input-small gf-form-input" ng-model="option.value" ng-options="t for t in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" ng-change="updateOverride()"></select>
+        </span>
+        <span class="max-width-10" ng-if="option.propertyName === 'zindex'">
+          <select class="input-small gf-form-input" ng-model="option.value" ng-options="t for t in [-3, -2, -1, 0, 1, 2, 3]" ng-change="updateOverride()"></select>
         </span>
       </div>
     </div>

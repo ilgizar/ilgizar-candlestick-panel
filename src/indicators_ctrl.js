@@ -4,6 +4,13 @@ import angular from 'angular';
 export class IndicatorsCtrl {
   /** @ngInject */
   constructor($scope, $element, popoverSrv) {
+    var defColor = '#ffffff';
+    var defMode = 'lines';
+    var defLineWidth = 1;
+    var defLineFill = 0;
+    var defPointRadius = 5;
+    var defZindex = 0;
+
     $scope.getOverride = function() {
       if (!$scope.ctrl.panel.seriesOverrides) {
         return [];
@@ -17,7 +24,7 @@ export class IndicatorsCtrl {
       $scope.currentOverrides = [];
       var value = $scope.override.color;
       if (_.isUndefined(value)) {
-        value = '#ffffff';
+        value = defColor;
       }
       $scope.currentOverrides.push({
         name: 'Color',
@@ -25,9 +32,27 @@ export class IndicatorsCtrl {
         value: value,
       });
 
+      var lines = $scope.override.lines;
+      if (_.isUndefined(lines)) {
+        lines = defMode === 'lines';
+      }
+      var bars = $scope.override.bars;
+      if (_.isUndefined(lines)) {
+        bras = defMode === 'bars';
+      }
+      var points = $scope.override.points;
+      if (_.isUndefined(lines)) {
+        points = defMode === 'points';
+      }
+      $scope.currentOverrides.push({
+        name: 'Draw mode',
+        propertyName: 'mode',
+        value: bars ? 'bars' : points ? 'points' : 'lines',
+      });
+
       value = $scope.override.linewidth;
       if (_.isUndefined(value)) {
-        value = 1;
+        value = defLineWidth;
       }
       $scope.currentOverrides.push({
         name: 'Line width',
@@ -37,19 +62,44 @@ export class IndicatorsCtrl {
 
       value = $scope.override.fill;
       if (_.isUndefined(value)) {
-        value = 0;
+        value = defLineFill;
       }
       $scope.currentOverrides.push({
-        name: 'Line fill',
+        name: 'Fill opacity',
         propertyName: 'fill',
+        value:  parseInt(value) * 10,
+      });
+
+      value = $scope.override.pointradius;
+      if (_.isUndefined(value)) {
+        value = defPointRadius;
+      }
+      $scope.currentOverrides.push({
+        name: 'Points radius',
+        propertyName: 'pointradius',
         value: value,
       });
-    };
+
+      value = $scope.override.zindex;
+      if (_.isUndefined(value)) {
+        value = defZindex;
+      }
+      $scope.currentOverrides.push({
+        name: 'Z-index',
+        propertyName: 'zindex',
+        value: value
+      });
+     };
 
     $scope.updateOverride = function() {
       $scope.override.color = $scope.currentOverrides[0].value;
-      $scope.override.linewidth = $scope.currentOverrides[1].value;
-      $scope.override.fill = $scope.currentOverrides[2].value;
+      $scope.override.lines = $scope.currentOverrides[1].value === 'lines';
+      $scope.override.bars = $scope.currentOverrides[1].value === 'bars';
+      $scope.override.points = $scope.currentOverrides[1].value === 'points';
+      $scope.override.linewidth = $scope.currentOverrides[2].value;
+      $scope.override.fill = parseInt($scope.currentOverrides[3].value) / 10;
+      $scope.override.pointradius = $scope.currentOverrides[4].value;
+      $scope.override.zindex = $scope.currentOverrides[5].value;
       $scope.ctrl.render();
     };
 
@@ -58,9 +108,14 @@ export class IndicatorsCtrl {
     if (!$scope.override || $scope.override.length === 0) {
       var override = {
         'alias': $scope.indicator.alias,
-        'color': '#ffffff',
-        'linewidth': 1,
-        'fill': 0,
+        'color': defColor,
+        'lines': defMode === 'lines',
+        'bars': defMode === 'bars',
+        'points': defMode === 'points',
+        'linewidth': defLineWidth,
+        'fill': defLineFill,
+        'pointradius': defPointRadius,
+        'zindex': defZindex,
       };
       if (!$scope.ctrl.panel.seriesOverrides) {
         $scope.ctrl.panel.seriesOverrides = [];

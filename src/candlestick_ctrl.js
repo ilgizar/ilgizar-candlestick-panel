@@ -13,14 +13,6 @@ export class CandleStickCtrl extends MetricsPanelCtrl {
     this.$rootScope = $rootScope;
     this.hiddenSeries = {};
 
-    this.logScales = {
-      linear: 1,
-      'log (base 2)': 2,
-      'log (base 10)': 10,
-      'log (base 32)': 32,
-      'log (base 1024)': 1024,
-    };
-
     let panelDefaults = {
       datasource: null,
       mode: 'color',

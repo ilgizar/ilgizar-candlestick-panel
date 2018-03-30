@@ -48,7 +48,7 @@ export default function link(scope, elem, attrs, ctrl) {
     'graph-hover',
     evt => {
       // ignore other graph hover events if shared tooltip is disabled
-      if (!dashboard.sharedTooltipModeEnabled()) {
+      if (!dashboard || !dashboard.sharedTooltipModeEnabled()) {
         return;
       }
 
@@ -130,7 +130,7 @@ export default function link(scope, elem, attrs, ctrl) {
       margin: 'auto',
       position: 'relative',
       width: panelWidth + 'px',
-      height: (panelHeight - 20) + 'px'
+      height: (panelHeight - 20) + 'px',
     };
 
     plotCanvas.css(plotCss);
@@ -167,9 +167,13 @@ export default function link(scope, elem, attrs, ctrl) {
 
     let options = {
       legend: {
-        show: false
+        show: false,
       },
       series: {
+        bars: {
+          show: false,
+          align: 'left',
+        },
         lines: {
           show: false,
           zero: false,
@@ -188,7 +192,7 @@ export default function link(scope, elem, attrs, ctrl) {
           drawCandlestick: newDrawCandlestick,
         },
         nearBy: {
-        }
+        },
       },
       yaxes: yaxes,
       xaxis: {
@@ -218,14 +222,17 @@ export default function link(scope, elem, attrs, ctrl) {
       },
       crosshair: {
         mode: 'x',
-      }
+      },
     };
 
+    var zIndexes = [0, 0, 0, 0, 0, 0];
     for (var i = 0; i < data.length; i++) {
       let series = data[i];
       if (series !== undefined) {
         series.data = series.getFlotPairs(series.nullPointMode || panel.nullPointMode);
       }
+      data[i].zindex = 'zindex' in data[i] && data[i].zindex !== undefined ? data[i].zindex : 0;
+      zIndexes[data[i].zindex + 3]++;
     }
 
     let candleData = [], high = [], low = [];
@@ -242,7 +249,60 @@ export default function link(scope, elem, attrs, ctrl) {
       high.push([data[0].data[i][0], data[3].data[i][1]]);
     }
 
-    let datas = [];
+    var datas = [];
+
+    var pushData = function(i) {
+      var fill = data[i].lines && data[i].lines.fill !== undefined ? data[i].lines.fill : 0;
+      datas.push({
+        lines: {
+          show: data[i].lines.show || !(data[i].points.show || data[i].bars.show),
+          zero: false,
+          lineWidth: data[i].lines && data[i].lines.lineWidth !== undefined ? data[i].lines.lineWidth : 1,
+          fill: fill
+        },
+        bars: {
+          show: data[i].bars.show,
+          fill: fill !== 0 ? fill : 1,
+          barWidth: getMinTimeStepOfSeries(data) / 1.5,
+          zero: false,
+          lineWidth: data[i].lines && data[i].lines.lineWidth !== undefined ? data[i].lines.lineWidth : 1,
+          align: 'left'
+        },
+        points: {
+          show: data[i].points.show,
+          fill: fill !== 0 ? fill : 1,
+          fillColor: false,
+          radius: data[i].points && data[i].points.radius !== undefined ? data[i].points.radius : 5
+        },
+        data: data[i].flotpairs,
+        color: data[i].color,
+        hoverable: false
+      });
+    };
+
+    var pushIndicators = function(begin, end) {
+      if (data.length > 5) {
+        for (var inx = begin + 3; inx <= end + 3; inx++) {
+          if (zIndexes[inx] === 0) {
+            continue;
+          }
+
+          for (i = 5; i < data.length; i++) {
+            if (inx - data[i].zindex !== 3) {
+              continue;
+            }
+            pushData(i);
+            zIndexes[inx]--;
+            if (zIndexes[inx] === 0) {
+              break;
+            }
+          }
+        }
+      }
+    };
+
+    pushIndicators(-3, -1);
+
     if (panel.showVolume && (data.length > 4) && (data[4] !== undefined)) {
       datas.push({
         lines: {
@@ -286,21 +346,7 @@ export default function link(scope, elem, attrs, ctrl) {
       }
     });
 
-    if (data.length > 5) {
-      for (i = 5; i < data.length; i++) {
-        datas.push({
-          lines: {
-            show: true,
-            zero: false,
-            lineWidth: 'lines' in data[i] && data[i].lines.lineWidth !== undefined ? data[i].lines.lineWidth : 1,
-            fill: 'lines' in data[i] && data[i].lines.fill !== undefined ? data[i].lines.fill : 0,
-          },
-          data: data[i].flotpairs,
-          color: data[i].color,
-          hoverable: false,
-        });
-      }
-    }
+    pushIndicators(0, 3);
 
     elem.html(plotCanvas);
 
@@ -313,6 +359,31 @@ export default function link(scope, elem, attrs, ctrl) {
       pos.panelRelY = (pos.pageY - elem.offset().top) / elem.height();
       appEvents.emit('graph-hover', {pos: pos, panel: panel});
     });
+  }
+
+  function getMinTimeStepOfSeries(data) {
+    var min = Number.MAX_VALUE;
+
+    for (let i = 0; i < data.length; i++) {
+      if (!data[i].stats.timeStep) {
+        continue;
+      }
+      if (panel.bars) {
+        if (data[i].bars && data[i].bars.show === false) {
+          continue;
+        }
+      } else {
+        if (typeof data[i].bars === 'undefined' || typeof data[i].bars.show === 'undefined' || !data[i].bars.show) {
+          continue;
+        }
+      }
+
+      if (data[i].stats.timeStep < min) {
+        min = data[i].stats.timeStep;
+      }
+    }
+
+    return min;
   }
 
   function showToolpit(pos) {
