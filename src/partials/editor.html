@@ -25,19 +25,6 @@
         <select class="input-small gf-form-input" ng-model="ctrl.panel.candlestickWidth" ng-options="t for t in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50]" ng-change="ctrl.render()"></select>
       </span>
     </div>
-    <gf-form-switch class="gf-form" label="Show volume" label-class="width-9" checked="ctrl.panel.showVolume" on-change="ctrl.render()"></gf-form-switch>
-    <div class="gf-form" ng-if="ctrl.panel.showVolume === true">
-      <label class="gf-form-label width-8 offset-width-1">Line width</label>
-      <span class="max-width-12">
-        <select class="input-small gf-form-input" ng-model="ctrl.panel.volumeWidth" ng-options="t for t in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" ng-change="ctrl.render()"></select>
-      </span>
-    </div>
-    <div class="gf-form" ng-if="ctrl.panel.showVolume === true">
-      <label class="gf-form-label width-8 offset-width-1">Line fill</label>
-      <span class="max-width-12">
-        <select class="input-small gf-form-input" ng-model="ctrl.panel.volumeFill" ng-options="t for t in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" ng-change="ctrl.render()"></select>
-      </span>
-    </div>
   </div>
 
   <div class="section gf-form-group">
@@ -72,12 +59,6 @@
         <spectrum-picker class="gf-form-input" ng-model="ctrl.panel.barColor" ng-change="ctrl.render()"></spectrum-picker>
       </span>
     </div>
-    <div class="gf-form" ng-if="ctrl.panel.showVolume === true">
-      <label class="gf-form-label width-9">Volume</label>
-      <span class="max-width-10">
-        <spectrum-picker class="gf-form-input" ng-model="ctrl.panel.volumeColor" ng-change="ctrl.render()"></spectrum-picker>
-      </span>
-    </div>
   </div>
 
   <div class="section gf-form-group">
@@ -90,7 +71,7 @@
       </span>
     </div>
     <div class="gf-form">
-      <label class="gf-form-label width-9">Volume label</label>
+      <label class="gf-form-label width-9">Other label</label>
       <span class="max-width-12">
         <input type="text" class="input-medium gf-form-input max-width-5" ng-model="ctrl.panel.labelY2" placeholder="none" empty-to-null ng-change="ctrl.render()" ng-model-onblur>
       </span>

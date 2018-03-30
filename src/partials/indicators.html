@@ -24,6 +24,9 @@
         <span class="max-width-10" ng-if="option.propertyName === 'zindex'">
           <select class="input-small gf-form-input" ng-model="option.value" ng-options="t for t in [-3, -2, -1, 0, 1, 2, 3]" ng-change="updateOverride()"></select>
         </span>
+        <span class="max-width-10" ng-if="option.propertyName === 'yaxis'">
+          <select class="input-small gf-form-input" ng-model="option.value" ng-options="t for t in ['price', 'other']" ng-change="updateOverride()"></select>
+        </span>
       </div>
     </div>
   </div>

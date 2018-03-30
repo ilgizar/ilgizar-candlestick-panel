@@ -10,6 +10,7 @@ export class IndicatorsCtrl {
     var defLineFill = 0;
     var defPointRadius = 5;
     var defZindex = 0;
+    var defYaxis = 1;
 
     $scope.getOverride = function() {
       if (!$scope.ctrl.panel.seriesOverrides) {
@@ -87,7 +88,17 @@ export class IndicatorsCtrl {
       $scope.currentOverrides.push({
         name: 'Z-index',
         propertyName: 'zindex',
-        value: value
+        value: value,
+      });
+
+      value = $scope.override.yaxis;
+      if (_.isUndefined(value)) {
+        value = defYaxis;
+      }
+      $scope.currentOverrides.push({
+        name: 'Y-axis',
+        propertyName: 'yaxis',
+        value: value === 2 ? 'other' : 'price',
       });
      };
 
@@ -100,6 +111,7 @@ export class IndicatorsCtrl {
       $scope.override.fill = parseInt($scope.currentOverrides[3].value) / 10;
       $scope.override.pointradius = $scope.currentOverrides[4].value;
       $scope.override.zindex = $scope.currentOverrides[5].value;
+      $scope.override.yaxis = $scope.currentOverrides[6].value === 'other' ? 2 : 1;
       $scope.ctrl.render();
     };
 
@@ -116,6 +128,7 @@ export class IndicatorsCtrl {
         'fill': defLineFill,
         'pointradius': defPointRadius,
         'zindex': defZindex,
+        'yaxis': defYaxis,
       };
       if (!$scope.ctrl.panel.seriesOverrides) {
         $scope.ctrl.panel.seriesOverrides = [];

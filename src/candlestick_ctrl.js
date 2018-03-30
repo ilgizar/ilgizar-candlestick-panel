@@ -19,16 +19,12 @@ export class CandleStickCtrl extends MetricsPanelCtrl {
       widthMode: 'auto',
       maxDataPoints: 80,
       candlestickWidth: 9,
-      showVolume: true,
-      volumeWidth: 1,
-      volumeFill: 1,
 
       bullColor: '#26ff42',
       bearColor: '#ff4a3a',
       dojiColor: '#c8c9ca',
       solidColor: '#000000',
       barColor: '#000000',
-      volumeColor: '#584477',
 
       swapYaxes: true,
       labelY1: null,
@@ -111,7 +107,7 @@ export class CandleStickCtrl extends MetricsPanelCtrl {
     }
 
     let result = new Array(4);
-    let index = 5;
+    let index = 4;
     for (let i = 0; i < series.length; i++) {
       if (series[i] !== undefined) {
         switch (series[i].alias) {
@@ -126,9 +122,6 @@ export class CandleStickCtrl extends MetricsPanelCtrl {
             break;
           case 'high':
             result[3] = series[i];
-            break;
-          case 'volume':
-            result[4] = series[i];
             break;
           default:
             result[index++] = series[i];
@@ -204,7 +197,7 @@ export class CandleStickCtrl extends MetricsPanelCtrl {
   }
 
   getIndicators() {
-    return this.series ? _.takeRight(this.series, this.series.length - 5) : [];
+    return this.series ? _.takeRight(this.series, this.series.length - 4) : [];
   }
 }
 

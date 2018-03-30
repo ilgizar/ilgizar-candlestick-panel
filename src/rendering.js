@@ -148,6 +148,22 @@ export default function link(scope, elem, attrs, ctrl) {
     let min = _.isUndefined(ctrl.range.from) ? null : ctrl.range.from.valueOf();
     let max = _.isUndefined(ctrl.range.to) ? null : ctrl.range.to.valueOf();
 
+    let zIndexes = [0, 0, 0, 0, 0, 0];
+    let secondYaxis = false;
+    for (var i = 0; i < data.length; i++) {
+      let series = data[i];
+      if (series !== undefined) {
+        series.data = series.getFlotPairs(series.nullPointMode || panel.nullPointMode);
+      }
+      if (i < 4) {
+        continue;
+      }
+      data[i].zindex = 'zindex' in data[i] && data[i].zindex !== undefined ? data[i].zindex : 0;
+      zIndexes[data[i].zindex + 3]++;
+      data[i].yaxis = 'yaxis' in data[i] && data[i].yaxis === 2 ? 2 : 1;
+      secondYaxis |= data[i].yaxis === 2;
+    }
+
     let yaxes = [{
       index: 1,
       logBase: 1,
@@ -155,7 +171,7 @@ export default function link(scope, elem, attrs, ctrl) {
       position: panel.swapYaxes ? 'right' : 'left',
       axisLabel: panel.labelY1,
     }];
-    if (panel.showVolume && (data.length > 4)) {
+    if (secondYaxis) {
       yaxes.push({
         index: 2,
         logBase: 1,
@@ -177,8 +193,6 @@ export default function link(scope, elem, attrs, ctrl) {
         lines: {
           show: false,
           zero: false,
-          lineWidth: panel.volumeWidth ? panel.volumeWidth : 0,
-          fill: panel.volumeFill ? (0.1 * panel.volumeFill) : 0,
         },
         candlestick: {
           active: true,
@@ -225,16 +239,6 @@ export default function link(scope, elem, attrs, ctrl) {
       },
     };
 
-    var zIndexes = [0, 0, 0, 0, 0, 0];
-    for (var i = 0; i < data.length; i++) {
-      let series = data[i];
-      if (series !== undefined) {
-        series.data = series.getFlotPairs(series.nullPointMode || panel.nullPointMode);
-      }
-      data[i].zindex = 'zindex' in data[i] && data[i].zindex !== undefined ? data[i].zindex : 0;
-      zIndexes[data[i].zindex + 3]++;
-    }
-
     let candleData = [], high = [], low = [];
 
     for (i = 0; i < data[0].data.length; i++) {
@@ -276,18 +280,19 @@ export default function link(scope, elem, attrs, ctrl) {
         },
         data: data[i].flotpairs,
         color: data[i].color,
+        yaxis: data[i].yaxis,
         hoverable: false
       });
     };
 
     var pushIndicators = function(begin, end) {
-      if (data.length > 5) {
+      if (data.length > 4) {
         for (var inx = begin + 3; inx <= end + 3; inx++) {
           if (zIndexes[inx] === 0) {
             continue;
           }
 
-          for (i = 5; i < data.length; i++) {
+          for (i = 4; i < data.length; i++) {
             if (inx - data[i].zindex !== 3) {
               continue;
             }
@@ -303,17 +308,6 @@ export default function link(scope, elem, attrs, ctrl) {
 
     pushIndicators(-3, -1);
 
-    if (panel.showVolume && (data.length > 4) && (data[4] !== undefined)) {
-      datas.push({
-        lines: {
-          show: true,
-        },
-        data: data[4].flotpairs,
-        color: panel.volumeColor,
-        yaxis: 2,
-        hoverable: false,
-      });
-    }
     datas.push({
       candlestick: {
         show: true
@@ -450,19 +444,11 @@ export default function link(scope, elem, attrs, ctrl) {
         panel.colorizeTooltip && panel.mode === 'color' ? panel.bearColor : grayColor, false) +
       seriesItem('Close', formatValue(data[1].datapoints[i][0]), grayColor, false);
 
-    let index = 3;
-    if (panel.showVolume && (data.length > 4) && (data[4] !== undefined)) {
-      body += seriesItem('Volume', formatValue(data[4].datapoints[i][0]),
-        panel.colorizeTooltip && panel.mode === 'color' ? panel.volumeColor : grayColor, false);
-      index++;
-    }
-
-    if (data.length > 5) {
+    if (data.length > 4) {
       body += '<div style="height: 2px; margin-top: 2px; border-top: solid 1px ' + grayColor + ';"></div>';
       let plotData = plot.getData();
-      for (let j = 5; j < data.length; j++) {
-        body += seriesItem(data[j].alias, formatValue(data[j].datapoints[i][0]),
-          plotData[index++].color, true);
+      for (let j = 4; j < data.length; j++) {
+        body += seriesItem(data[j].alias, formatValue(data[j].datapoints[i][0]), data[j].color, true);
       }
     }
 
