@@ -153,25 +153,28 @@ export class CandleStickCtrl extends MetricsPanelCtrl {
   }
 
   refreshColors() {
-    for (let i = 5; i < this.series.length; i++) {
-      var index = i - 5;
+    for (let i = 4; i < this.series.length; i++) {
       if (this.series[i] !== undefined) {
-        if (
-          this.panel.seriesOverrides === undefined ||
-          this.panel.seriesOverrides.length <= index ||
-          this.panel.seriesOverrides[index] === undefined
-        ) {
+        var index = -1;
+        if (this.panel.seriesOverrides !== undefined) {
+          for (let j = 0; j < this.panel.seriesOverrides.length; j++) {
+            if (this.panel.seriesOverrides[j].alias === this.series[i].alias) {
+              index = j;
+              break;
+            }
+          }
+        }
+        if (index < 0) {
           if (this.panel.seriesOverrides === undefined) {
             this.panel.seriesOverrides = [];
           }
+          index = this.panel.seriesOverrides.length;
           this.panel.seriesOverrides[index] = {
             alias: this.series[i].alias,
             color: colors[index % colors.length],
             linewidth: 1,
             fill: 0
           };
-        } else {
-          this.panel.seriesOverrides[index].alias = this.series[i].alias;
         }
         this.series[i].color = this.panel.seriesOverrides[index].color;
       }
