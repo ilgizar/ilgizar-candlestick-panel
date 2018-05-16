@@ -447,8 +447,16 @@ export default function link(scope, elem, attrs, ctrl) {
     if (data.length > 4) {
       body += '<div style="height: 2px; margin-top: 2px; border-top: solid 1px ' + grayColor + ';"></div>';
       let plotData = plot.getData();
+      var value;
       for (let j = 4; j < data.length; j++) {
-        body += seriesItem(data[j].alias, formatValue(data[j].datapoints[i][0]), data[j].color, true);
+        if (data[j].datapoints.length === 1) {
+          value = data[j].datapoints[0][0];
+        } else if (data[j].datapoints[i] === undefined) {
+          continue;
+        } else {
+          value = data[j].datapoints[i][0];
+        }
+        body += seriesItem(data[j].alias, formatValue(value), data[j].color, true);
       }
     }
 
