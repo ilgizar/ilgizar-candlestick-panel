@@ -4,6 +4,11 @@
 
 [Official Grafana Plugins install instruction](http://docs.grafana.org/plugins/installation/#installing-plugins-manually)
 
+#### Install using the Grafana CLI
+```
+grafana-cli --pluginUrl https://github.com/ilgizar/ilgizar-candlestick-panel/raw/master/pack/ilgizar-candlestick-panel.zip plugins install ilgizar-candlestick-panel
+```
+
 ### Usage
 
 Four basic metrics should have aliases: *open*, *close*, *high*, *low*. The trade volume metric has alias *volume*. All other metrics are taken by indicators.
