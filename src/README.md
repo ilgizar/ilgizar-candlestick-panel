@@ -25,16 +25,16 @@ Examples of query on InfluxDB data source:
 ### Screenshots
 
 Main view with plugin options:
-![example color chart](screenshots/color.jpg)
+![example color chart](https://raw.githubusercontent.com/ilgizar/ilgizar-candlestick-panel/1944a532f6891659fbf94ae8b42571a481187b85/screenshots/color.jpg)
 
 Solid view:
-![example solid chart](screenshots/solid.jpg)
+![example solid chart](https://raw.githubusercontent.com/ilgizar/ilgizar-candlestick-panel/1944a532f6891659fbf94ae8b42571a481187b85/screenshots/solid.jpg)
 
 Bar view:
-![example bar chart](screenshots/bar.jpg)
+![example bar chart](https://raw.githubusercontent.com/ilgizar/ilgizar-candlestick-panel/1944a532f6891659fbf94ae8b42571a481187b85/screenshots/bar.jpg)
 
 Chart with indicators:
-![example chart with indicators](screenshots/ema.jpg)
+![example chart with indicators](https://raw.githubusercontent.com/ilgizar/ilgizar-candlestick-panel/1944a532f6891659fbf94ae8b42571a481187b85/screenshots/ema.jpg)
 
 #### Changelog
 
